@@ -19,9 +19,10 @@ const steps = [
   { icon: Star, label: "Welcome" },
   { icon: Star, label: "Full Name" },
   { icon: User, label: "Date of Birth" },
-  { icon: HeartPulse, label: "Blood Type" },
+
   { icon: MailCheck, label: "Phone Number" },
   { icon: Users, label: "Email" },
+  { icon: HeartPulse, label: "Blood Type" },
   { icon: MessageCircle, label: "Finished" },
 ];
 

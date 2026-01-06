@@ -1,21 +1,20 @@
 "use client";
-import InputContainer from "./InputContainer";
+import classNames from "classnames";
+import { AnimatePresence, motion } from "framer-motion";
+import { PlusCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import ProgressNav from "./ProgressNav";
+import { usePopupModal } from "../hooks/usePopupModal";
 import { useProgressState } from "../hooks/useProgressState";
-import Welcome from "./forms/Welcome";
-import Fullname from "./forms/Fullname";
+import BloodType from "./forms/BloodType";
 import DateOfBirth from "./forms/DateOfBirth";
-import PhoneNumber from "./forms/PhoneNumber";
 import Email from "./forms/Email";
 import Finished from "./forms/Finished";
-import { motion, AnimatePresence } from "framer-motion";
-import classNames from "classnames";
-import { usePopupModal } from "../hooks/usePopupModal";
+import Fullname from "./forms/Fullname";
+import PhoneNumber from "./forms/PhoneNumber";
+import Welcome from "./forms/Welcome";
 import NotificationModal from "./NotificationModal";
-import { useState } from "react";
-import { PlusCircle } from "lucide-react";
-import BloodType from "./forms/BloodType";
+import ProgressNav from "./ProgressNav";
 
 export type FormData = {
   firstName: string;
@@ -48,6 +47,15 @@ const Homepage = () => {
   };
   const [previewData, setPreviewData] = useState<FormData | null>(null);
 
+  const [bloodType, setBloodType] = useState<string>("");
+
+  useEffect(() => {
+    console.log(bloodType);
+    if (bloodType) {
+      setValue("blood_type", bloodType);
+    }
+  }, [bloodType, setValue]);
+
   const renderCurrentForm = () => {
     switch (progressState.currentPhase) {
       case "welcome":
@@ -57,7 +65,20 @@ const Homepage = () => {
       case "date_of_birth":
         return <DateOfBirth register={register} watch={watch} />;
       case "blood_type":
-        return <BloodType register={register} watch={watch} />;
+        return (
+          <BloodType
+            bloodType={bloodType}
+            register={register}
+            setBloodType={(bt) => {
+              setBloodType(bt);
+              setValue("blood_type", bloodType, {
+                shouldValidate: true,
+                shouldTouch: true,
+                shouldDirty: true,
+              });
+            }}
+          />
+        );
       case "phone_number":
         return <PhoneNumber register={register} setValue={setValue} />;
       case "email":
@@ -105,16 +126,6 @@ const Homepage = () => {
           return "date_of_birth";
         }
 
-        return "blood_type";
-      }
-      case "blood_type": {
-        const dob = getValues("blood_type");
-
-        if (!dob) {
-          showError("Blood type is required.");
-          return "blood_type";
-        }
-
         return "phone_number";
       }
 
@@ -146,6 +157,18 @@ const Homepage = () => {
           showError("Please enter a valid email address.");
           return "email";
         }
+
+        return "blood_type"; // blood_type now comes after email
+      }
+
+      case "blood_type": {
+        const blood = bloodType;
+
+        if (!blood) {
+          showError("Blood type is required.");
+          return "blood_type";
+        }
+        setValue("blood_type", blood);
         setPreviewData(getValues());
         return "finished";
       }
@@ -157,15 +180,15 @@ const Homepage = () => {
 
   const getPreviousForm = (current = progressState.currentPhase) => {
     if (current === "finished") {
+      return "blood_type";
+    } else if (current === "blood_type") {
       return "email";
     } else if (current === "email") {
       return "phone_number";
     } else if (current === "phone_number") {
-      return "blood_type";
+      return "date_of_birth";
     } else if (current === "date_of_birth") {
       return "full_name";
-    } else if (current === "blood_type") {
-      return "date_of_birth";
     } else if (current === "full_name") {
       return "welcome";
     } else {

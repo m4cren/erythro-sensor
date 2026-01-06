@@ -4,9 +4,10 @@ const progressIndexMap: Record<string, number> = {
   welcome: 0,
   full_name: 1,
   date_of_birth: 2,
-  blood_type: 3,
-  phone_number: 4,
-  email: 5,
+
+  phone_number: 3,
+  email: 4,
+  blood_type: 5,
   finished: 6,
 };
 

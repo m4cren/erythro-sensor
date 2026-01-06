@@ -49,6 +49,10 @@ const Finished = ({ isSubmitting, isSubmitted, data }: Props) => {
                   <span className="font-medium text-white/90">Email:</span>{" "}
                   {data.email}
                 </div>
+                <div>
+                  <span className="font-medium text-white/90">Blood Type:</span>{" "}
+                  {data.blood_type}
+                </div>
               </div>
             </div>
           )}
@@ -108,6 +112,10 @@ const Finished = ({ isSubmitting, isSubmitted, data }: Props) => {
                 <div>
                   <span className="font-medium text-white/90">Email:</span>{" "}
                   {data.email}
+                </div>
+                <div>
+                  <span className="font-medium text-white/90">Blood Type:</span>{" "}
+                  {data.blood_type}
                 </div>
               </div>
             </div>
