@@ -222,6 +222,7 @@ const Homepage = () => {
   };
   return (
     <main className="w-full h-screen flex items-center justify-center">
+      <div className="bg-black/10 fixed w-full top-0 left-0 right-0 bottom-0 backdrop-blur-sm z-100"></div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className={classNames(
